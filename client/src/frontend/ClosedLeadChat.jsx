@@ -13,7 +13,7 @@ const ClosedLeadChat = ({closedLeadchat,handleClosedleadlist}) => {
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch('http://192.168.1.11:3002/newmessages', {
+          const response = await fetch('http://192.168.1.13:3002/newmessages', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

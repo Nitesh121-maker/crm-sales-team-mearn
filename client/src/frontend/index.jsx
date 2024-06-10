@@ -31,8 +31,8 @@ const [closedChat, setClosedChat ] = useState( false );
 const [closedleadschat,setClosedleadschat] = useState( null );
 const [generatedInvoice, setGeneratedInvoice] = useState( false );
 const [isLogedin,setisLogedin] = useState( false );
-const [salesdata,setsalesdata] = useState('');
-
+const [salesdata,setsalesdata] = useState([]);
+const [inprogrss,setInprogress] = useState([]);
 const navigate =  useNavigate();
 
 // const handleList = () => {
@@ -164,7 +164,7 @@ useEffect(() => {
 // Logout
 const handleLogout = async () => {
     try {
-        const response = await fetch('http://192.168.1.11:3002/logout', {
+        const response = await fetch('http://192.168.1.13:3002/logout', {
             method: 'POST', // Change to POST
             headers: {
                 'Content-Type': 'application/json'
@@ -201,7 +201,7 @@ const handleChange =(e)=>{
 const createLead = async(e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://192.168.1.11:3002/createlead',{
+        const response = await fetch('http://192.168.1.13:3002/createlead',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -223,7 +223,7 @@ const[closedLeadslist, setClosedLeadlist] = useState(['']);
 useEffect(() => {
   const newclosedlead = async(e) => {
       try {
-          const response = await fetch(`http://192.168.1.11:3002/closedLeadlist/${sperson_unique_id}`);
+          const response = await fetch(`http://192.168.1.13:3002/closedLeadlist/${sperson_unique_id}`);
           if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`)
           }
@@ -243,7 +243,7 @@ const[errormessage,seterrormessage] = useState("");
 useEffect(() => {
  const fetchSuccessfulLeads = async () => {
     try {
-       const response = await fetch(`http://192.168.1.11:3002/successfullead/${sperson_unique_id}`);
+       const response = await fetch(`http://192.168.1.13:3002/successfullead/${sperson_unique_id}`);
        if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
        }
@@ -263,7 +263,7 @@ const [notification,setNotification] = useState(['']);
 useEffect(() => {
     const getNotification = async() => {
         try {
-            const response = await fetch(`http://192.168.1.11:3002/notification-list/${sperson_unique_id}`);
+            const response = await fetch(`http://192.168.1.13:3002/notification-list/${sperson_unique_id}`);
             if (!response.ok) {
                 throw new Error(`Error! status: ${response.status}`);  
             }
@@ -277,11 +277,28 @@ useEffect(() => {
     };
     getNotification();
 }, []); 
+// In-progress
+useEffect(() => {
+    const getInprogress = async(e)=>{
+       try {
+         const response = await fetch(`http://192.168.1.13:3002/in-progress/${sperson_unique_id}`);
+         if(!response.ok){
+            throw new Error(`Error! status:${response.status}`);
+         }
+         const data = await response.json();
+         setInprogress(data);
+       } catch (error) {
+         seterrormessage(error)
+       }
+    }
+    getInprogress();
+}, []);
+console.log('INprogress',inprogrss)
 // Sales Data
 useEffect(() => {
     const getsales = async(e) =>{
         try {
-            const response = await fetch(`http://192.168.1.11:3002/sales-data/${sperson_unique_id}`);
+            const response = await fetch(`http://192.168.1.13:3002/sales-data/${sperson_unique_id}`);
             if(!response.ok){
                 throw new Error(`Error! status: ${response.status}`);  
             }
@@ -298,23 +315,37 @@ useEffect(() => {
 const chartRef = useRef(null); // Reference to the canvas element
 const chartInstanceRef = useRef(null); // Reference to the Chart instance
 
-
+console.log('Sales Data ',salesdata);
 useEffect(() => {
-    const data = [
-      { month: 'January', sales: 30 },
-      { month: 'February', sales: 45 },
-      { month: 'March', sales: 40 },
-      { month: 'April', sales: 50 },
-      { month: 'May', sales: 55 },
-      { month: 'June', sales: 60 },
-      { month: 'July', sales: 65 },
-      { month: 'August', sales: 70 },
-      { month: 'September', sales: 75 },
-      { month: 'October', sales: 80 },
-      { month: 'November', sales: 85 },
-      { month: 'December', sales: 90 },
-    ];
-
+    // const data = [
+    //   { month: 'January', sales: 30 },
+    //   { month: 'February', sales: 45 },
+    //   { month: 'March', sales: 40 },
+    //   { month: 'April', sales: 50 },
+    //   { month: 'May', sales: 55 },
+    //   { month: 'June', sales: 60 },
+    //   { month: 'July', sales: 65 },
+    //   { month: 'August', sales: 70 },
+    //   { month: 'September', sales: 75 },
+    //   { month: 'October', sales: 80 },
+    //   { month: 'November', sales: 85 },
+    //   { month: 'December', sales: 90 },
+    // ];
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      
+      const data = monthNames.map((month, index) => {
+        const monthIndex = String(index + 1).padStart(2, '0');
+        const sale = salesdata.find(sale => sale.sale_month === `2024-${monthIndex}`);
+        return {
+          month,
+          sales: sale ? sale.total_amount : 0,
+        };
+      });
+      
+      console.log(data);
     const ctx = chartRef.current?.getContext('2d');
 
     if (ctx) {
@@ -401,7 +432,7 @@ const notificationCount24HoursOld = notification.reduce((count, notification) =>
 // Closed List count
 let  closeLeadcount = closedLeadslist.length||0;
 let successLeadcount =  successLead.length||0;
-
+let  inprogrssclient = inprogrss.length||0;
 
 
   return (
@@ -506,7 +537,7 @@ let successLeadcount =  successLead.length||0;
                                     </div>
                                     <div className="col-lg-3 col-md-3 lead-category inprogrss-lead">
                                         <span>In Progress</span>
-                                        <span>10</span>
+                                        <span>{inprogrssclient}</span>
                                     </div>
                                     <div className="col-lg-3 col-md-3 lead-category successfull-leads" onClick={handleSuccessfulleadlist}>
                                         <span>Successful Leads</span>

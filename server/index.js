@@ -197,7 +197,18 @@ app.get('/newclient/:sperson_unique_id', (req, res) => {
         }
     });
 });
-
+// Get In-progress data
+app.get('/in-progress/:sperson_unique_id',(req,res)=>{
+    const {sperson_unique_id} = req.params;
+    const sqlInprogress = `SELECT * FROM new_lead WHERE sales_person_id = ?`;
+    con.query(sqlInprogress,[sperson_unique_id],(err,result)=>{
+        if(err){
+            res.status(500).send({message:'Internal Server Error in '})
+        }else{
+            res.send(result)
+        }
+    })
+})
 // New Messages
 app.post('/newmessages', (req, res) => {
     const { uniqueid, message, reminder } = req.body;
@@ -320,6 +331,8 @@ app.get('/successfullead/:sperson_unique_id', (req, res) => {
        }
     });
  });
+
+
  app.get('/sales-data/:sperson_unique_id',(req,res)=>{
     const {sperson_unique_id} = req.params;
     const sqlgetsales = `
@@ -566,7 +579,7 @@ app.post('/mail/:uniqueid', upload.single('invoice'), async (req, res) => {
 
 
   
-app.listen(3002,'192.168.1.11',()=>{
+app.listen(3002,'192.168.1.13',()=>{
      console.log('Server is successfully runnig on 3002 port')
 });
 

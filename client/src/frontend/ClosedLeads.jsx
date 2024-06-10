@@ -17,7 +17,7 @@ function ClosedLeads({ClosedLeads}) {
     const handleSubmit  = async (e) =>{
         e.preventDefault();
         try {
-            const response = await fetch('http://192.168.1.11:3002/closedlead',{
+            const response = await fetch('http://192.168.1.13:3002/closedlead',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
