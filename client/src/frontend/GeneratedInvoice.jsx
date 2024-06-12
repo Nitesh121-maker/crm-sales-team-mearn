@@ -36,7 +36,14 @@ const GeneratedInvoice = () => {
                             <td>{data.company}</td>
                             <td>{data.invoice_number}</td>
                             <td>{data.invoice_date}</td>
-                            <button>Preview</button>
+                            <td>
+                                <a href={`http://192.168.1.13:3002/downloads/${data.unique_id}.pdf`} 
+                                className='btn-rounded btn-fixed-w btn btn-outline-primary' 
+                                target="_blank" 
+                                rel="noopener noreferrer">
+                                    Preview
+                                </a>
+                            </td>
                         </tr>
                     ))
                 ) : (

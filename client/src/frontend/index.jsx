@@ -10,6 +10,7 @@ import SuccessfulLeads from './SuccessfulLeads';
 import Invoice from './Invoice';
 import ClosedLeadChat from './ClosedLeadChat';
 import GeneratedInvoice from './GeneratedInvoice';
+import DataDeliveryStatus from './DataDeliveryStatus';
 import  { useNavigate } from 'react-router-dom';
 import Chart from 'chart.js/auto';
 // import axios from 'axios';
@@ -33,6 +34,8 @@ const [generatedInvoice, setGeneratedInvoice] = useState( false );
 const [isLogedin,setisLogedin] = useState( false );
 const [salesdata,setsalesdata] = useState([]);
 const [inprogrss,setInprogress] = useState([]);
+const [dataDelivery,setdatadelivery] = useState(false);
+const [successfulleadsdata,setsuccessfullleadsdata] = useState([]);
 const navigate =  useNavigate();
 
 // const handleList = () => {
@@ -57,6 +60,7 @@ const handleLeads = (lead) => {
     setInvoice(false);
     setClosedChat(false);
     setGeneratedInvoice(false);
+    setdatadelivery(false);
 }
 const handleClosedLeads = (closedleaddata) => {
     // setclosedlead(true);
@@ -72,6 +76,7 @@ const handleClosedLeads = (closedleaddata) => {
     setInvoice(false);
     setClosedChat(false);
     setGeneratedInvoice(false);
+    setdatadelivery(false);
 }
 
 const handleClosedleadlist = ()=>{
@@ -85,6 +90,7 @@ const handleClosedleadlist = ()=>{
     setInvoice(false);
     setClosedChat(false);
     setGeneratedInvoice(false);
+    setdatadelivery(false);
 }
 const handleSuccessfulleadlist = ()=>{
     setSucccessLeads(true);
@@ -97,6 +103,7 @@ const handleSuccessfulleadlist = ()=>{
     setInvoice(false);
     setClosedChat(false);
     setGeneratedInvoice(false);
+    setdatadelivery(false);
 }
 
 const handleNotification = () => {
@@ -110,6 +117,7 @@ const handleNotification = () => {
     setClosedChat(false);
     setInvoice(false);
     setGeneratedInvoice(false);
+    setdatadelivery(false);
 }
 const handleInvoice = (invoiceData) => {
     setClosedChat(false);
@@ -122,6 +130,7 @@ const handleInvoice = (invoiceData) => {
     setList(false);
     setNewlead(false);
     setGeneratedInvoice(false);
+    setdatadelivery(false);
 }
 const handleClosedLeadsChat = (leads) => {
     setClosedleadschat(leads);
@@ -134,6 +143,7 @@ const handleClosedLeadsChat = (leads) => {
     setLeads(false);
     setList(false);
     setNewlead(false);
+    setdatadelivery(false);
 }
 const handleGeneratedInvoice = () =>{
     setGeneratedInvoice(true);
@@ -145,6 +155,20 @@ const handleGeneratedInvoice = () =>{
     setLeads(false);
     setList(false);
     setNewlead(false);
+    setdatadelivery(false);
+}
+const handleDelivereddata = (successfulleadsdata) =>{
+    setdatadelivery(true);
+    setGeneratedInvoice(false);
+    setClosedChat(false);
+    setInvoice(false);
+    setSucccessLeads(false);
+    setClosedLeadList(false)
+    setclosedleadform(false);
+    setLeads(false);
+    setList(false);
+    setNewlead(false);
+    setsuccessfullleadsdata(successfulleadsdata);
 }
 // Login
 const sperson_unique_id = sessionStorage.getItem( 'unique_id');
@@ -317,20 +341,7 @@ const chartInstanceRef = useRef(null); // Reference to the Chart instance
 
 console.log('Sales Data ',salesdata);
 useEffect(() => {
-    // const data = [
-    //   { month: 'January', sales: 30 },
-    //   { month: 'February', sales: 45 },
-    //   { month: 'March', sales: 40 },
-    //   { month: 'April', sales: 50 },
-    //   { month: 'May', sales: 55 },
-    //   { month: 'June', sales: 60 },
-    //   { month: 'July', sales: 65 },
-    //   { month: 'August', sales: 70 },
-    //   { month: 'September', sales: 75 },
-    //   { month: 'October', sales: 80 },
-    //   { month: 'November', sales: 85 },
-    //   { month: 'December', sales: 90 },
-    // ];
+
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -610,7 +621,7 @@ let  inprogrssclient = inprogrss.length||0;
                         }
                         {successLeads&&
                             <div className="SuccessfulLeads">
-                                <SuccessfulLeads successLead={successLead} errormessage={errormessage}/>
+                                <SuccessfulLeads successLead={successLead} errormessage={errormessage} handleDelivereddata={handleDelivereddata}/>
                             </div>
                         }
                         {invoice&&
@@ -626,6 +637,11 @@ let  inprogrssclient = inprogrss.length||0;
                         {generatedInvoice&&
                             <div className="generatedinvoice">
                             < GeneratedInvoice/>
+                            </div>
+                        }
+                        {dataDelivery&&
+                            <div className="DataDelivery">
+                            < DataDeliveryStatus successLead={successLead} handleDelivereddata={handleDelivereddata} handleSuccessfulleadlist={handleSuccessfulleadlist} successfulleadsdata={successfulleadsdata}/>
                             </div>
                         }
                     </div>

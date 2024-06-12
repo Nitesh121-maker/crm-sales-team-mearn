@@ -577,7 +577,18 @@ app.post('/mail/:uniqueid', upload.single('invoice'), async (req, res) => {
     }
 });
 
-
+// Get Delivered data 
+app.get('/delivered-data/:unique_id',(req,res)=>{
+    const{unique_id} = req.params;
+    const sqlGetdelivereddata = `SELECT * FROM sent_data WHERE unique_id = ?`;
+    con.query(sqlGetdelivereddata,[unique_id],(err,result)=>{
+        if (err) {
+            res.status(500).send({message:'Internal Server Error in deliveres-data api'});
+        } else {
+            res.send(result)
+        }
+    })
+})
   
 app.listen(3002,'192.168.1.13',()=>{
      console.log('Server is successfully runnig on 3002 port')
