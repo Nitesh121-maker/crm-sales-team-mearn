@@ -44,7 +44,7 @@ const Notification = ({ notification ,handleLeads }) => {
                     <li key={index} className="notification-item" onClick={()=>handleClick(notification)}>
                         <div className="notification-content">
                             <span className="notification-icon">🔔</span>
-                            <span className="notification-text">{notification.fullname}: {notification.message}</span>
+                            <span className="notification-text">{notification.fullname}: {notification.requirements}</span>
                         </div>
                     </li>
                 );

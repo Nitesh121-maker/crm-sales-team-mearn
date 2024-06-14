@@ -1,5 +1,7 @@
 import React,{ useEffect, useRef, useState } from 'react'
+
 import '../css/index.css'
+import "bootstrap/dist/css/bootstrap.min.css";
 import Newlead from './Newlead'
 import Leads from './leads';
 import ClosedLeads from './ClosedLeads';
@@ -108,16 +110,19 @@ const handleSuccessfulleadlist = ()=>{
 
 const handleNotification = () => {
     setNotificationshow(prevState => !prevState);
-    setNewlead(false);
-    setSucccessLeads(false);
-    setClosedLeadList(false)
-    setclosedleadform(false);
-    setLeads(false);
-    setList(false);
-    setClosedChat(false);
-    setInvoice(false);
-    setGeneratedInvoice(false);
-    setdatadelivery(false);
+    // setNewlead(false);
+    // setSucccessLeads(false);
+    // setClosedLeadList(false)
+    // setclosedleadform(false);
+    // setLeads(false);
+    // setList(false);
+    // setClosedChat(false);
+    // setInvoice(false);
+    // setGeneratedInvoice(false);
+    // setdatadelivery(false);
+}
+const handleNotificationclose =()=>{
+    setNotificationshow(false)
 }
 const handleInvoice = (invoiceData) => {
     setClosedChat(false);
@@ -188,7 +193,7 @@ useEffect(() => {
 // Logout
 const handleLogout = async () => {
     try {
-        const response = await fetch('http://192.168.1.13:3002/logout', {
+        const response = await fetch('http://192.168.1.10:3002/logout', {
             method: 'POST', // Change to POST
             headers: {
                 'Content-Type': 'application/json'
@@ -225,7 +230,7 @@ const handleChange =(e)=>{
 const createLead = async(e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://192.168.1.13:3002/createlead',{
+        const response = await fetch('http://192.168.1.10:3002/createlead',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -247,7 +252,7 @@ const[closedLeadslist, setClosedLeadlist] = useState(['']);
 useEffect(() => {
   const newclosedlead = async(e) => {
       try {
-          const response = await fetch(`http://192.168.1.13:3002/closedLeadlist/${sperson_unique_id}`);
+          const response = await fetch(`http://192.168.1.10:3002/closedLeadlist/${sperson_unique_id}`);
           if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`)
           }
@@ -267,7 +272,7 @@ const[errormessage,seterrormessage] = useState("");
 useEffect(() => {
  const fetchSuccessfulLeads = async () => {
     try {
-       const response = await fetch(`http://192.168.1.13:3002/successfullead/${sperson_unique_id}`);
+       const response = await fetch(`http://192.168.1.10:3002/successfullead/${sperson_unique_id}`);
        if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
        }
@@ -287,7 +292,7 @@ const [notification,setNotification] = useState(['']);
 useEffect(() => {
     const getNotification = async() => {
         try {
-            const response = await fetch(`http://192.168.1.13:3002/notification-list/${sperson_unique_id}`);
+            const response = await fetch(`http://192.168.1.10:3002/notification-list/${sperson_unique_id}`);
             if (!response.ok) {
                 throw new Error(`Error! status: ${response.status}`);  
             }
@@ -305,7 +310,7 @@ useEffect(() => {
 useEffect(() => {
     const getInprogress = async(e)=>{
        try {
-         const response = await fetch(`http://192.168.1.13:3002/in-progress/${sperson_unique_id}`);
+         const response = await fetch(`http://192.168.1.10:3002/in-progress/${sperson_unique_id}`);
          if(!response.ok){
             throw new Error(`Error! status:${response.status}`);
          }
@@ -319,10 +324,11 @@ useEffect(() => {
 }, []);
 console.log('INprogress',inprogrss)
 // Sales Data
-useEffect(() => {
+useEffect((e) => {
     const getsales = async(e) =>{
+
         try {
-            const response = await fetch(`http://192.168.1.13:3002/sales-data/${sperson_unique_id}`);
+            const response = await fetch(`http://192.168.1.10:3002/sales-data/${sperson_unique_id}`);
             if(!response.ok){
                 throw new Error(`Error! status: ${response.status}`);  
             }
@@ -372,8 +378,9 @@ useEffect(() => {
             {
               label: 'Monthly Sales',
               data: data.map(row => row.sales),
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              backgroundColor: 'rgba(73, 8, 250, 0.85)',
               borderColor: 'rgba(75, 192, 192, 1)',
+             
               borderWidth: 1,
             },
           ],
@@ -450,7 +457,7 @@ let  inprogrssclient = inprogrss.length||0;
     <>
     {isLogedin&&
         <div>
-            <div className="container-fluid bg-blue">
+            <div className="header-area">
                 <div className='container'>
                     <div className='nav'>
                         <div className="tradeimex">
@@ -489,7 +496,7 @@ let  inprogrssclient = inprogrss.length||0;
                     </div>
                 </div>
             </div>
-            <div className="container-fluid bg-gray">
+            <div className="main-content container-fluid">
                 <div className='row col-lg-12 col-md-12 col-sm-12'>
                     <div className="sidebar col-lg-3 col-md-3 col-sm-2">
                         <div className="profile">
@@ -535,12 +542,12 @@ let  inprogrssclient = inprogrss.length||0;
                         </div>
                     </div>
                     {/* Create New Lead */}
-                    <div className="hero-content col-lg-9 col-md-9">
+                    <div className="col-lg-9 col-md-9">
                         { notificationshow&&
                             <Notificationpage notification={notification} handleLeads={handleLeads}/>
                         }
                         {newlead&&
-                            <div className='hero-options'>
+                            <div className='hero-options' onClick={handleNotificationclose}>
                                 <div className="row gap-4 col-lg-12 p-6 justify-center">
                                     <div className="col-lg-3 col-md-3 lead-category closed-leads"  onClick={handleClosedleadlist}>
                                         <span>Closed Leads</span>
@@ -558,37 +565,39 @@ let  inprogrssclient = inprogrss.length||0;
                                 <div className='container'>
                                     <div className='row col-lg-12'>
                                         <div className='col-lg-6'>
-                                            <div className="form-container">
-                                                <h3>Create New Lead</h3>
+                                            <div className="card mt-4 form-container">
+                                                <div className="card-body">
+                                                <h3 className='card_title'>Create New Lead</h3>
                                                 {message && <p className='message'>{message}</p>}
-                                                <form className="form" method='POST' onSubmit={createLead}>
-                                                    <div className="form-group">
-                                                    <input type="text" placeholder="Enter your full name" name='fullname'value={formlead.fullname} onChange={handleChange} className="input-field" required />
-                                                    </div>
-                                                    <div className="form-group">
-                                                    <input type="email" placeholder="Enter your email address" name='email' value={formlead.email} onChange={handleChange} className="input-field" required/>
-                                                    </div>
-                                                    <div className="form-group">
-                                                    <input type="tel" placeholder="Enter your phone number" name='phone' value={formlead.phone} onChange={handleChange} className="input-field" required/>
-                                                    </div>
-                                                    <div className="form-group">
-                                                    <input type="text" name="company" id="" placeholder='Enter Company Name....' className='input-field' value={formlead.company} onChange={handleChange}/>
-                                                    {/* <textarea placeholder="Enter requirements" name='requirements' value={formlead.requirements} onChange={handleChange} className="textarea-field" rows={10} required/> */}
-                                                    </div>
-                                                    <div className="form-group">                                  
-                                                    <textarea placeholder="Enter requirements" name='requirements' value={formlead.requirements} onChange={handleChange} className="textarea-field"  required/>
-                                                    </div>
-                                                    <div className="form-group">     
-                                                    <label htmlFor="">Set Reminder</label>                             
-                                                    <input type="datetime-local" name="reminder" id="" className="input-field" value={formlead.reminder} onChange={handleChange}/>
-                                                    </div>
-                                                    <div className="form-group">
-                                                    <button type="submit" className="submit-button">Submit</button>
-                                                    </div>
-                                                </form>
+                                                    <form className="" method='POST' onSubmit={createLead}>
+                                                        <div className="form-group">
+                                                        <input type="text" placeholder="Enter your full name" name='fullname'value={formlead.fullname} onChange={handleChange} className="form-control-lg form-control" required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                        <input type="email" placeholder="Enter your email address" name='email' value={formlead.email} onChange={handleChange} className="form-control-lg form-control" required/>
+                                                        </div>
+                                                        <div className="form-group">
+                                                        <input type="tel" placeholder="Enter your phone number" name='phone' value={formlead.phone} onChange={handleChange} className="form-control-lg form-control" required/>
+                                                        </div>
+                                                        <div className="form-group">
+                                                        <input type="text" name="company" id="" placeholder='Enter Company Name....' className='form-control-lg form-control' value={formlead.company} onChange={handleChange}/>
+                                                        {/* <textarea placeholder="Enter requirements" name='requirements' value={formlead.requirements} onChange={handleChange} className="textarea-field" rows={10} required/> */}
+                                                        </div>
+                                                        <div className="form-group">                                  
+                                                        <textarea placeholder="Enter requirements" name='requirements' value={formlead.requirements} onChange={handleChange} className="form-control-lg form-control"  required/>
+                                                        </div>
+                                                        <div className="form-group">     
+                                                        <label htmlFor="" className='col-form-label text-white'>Set Reminder</label>                             
+                                                        <input type="datetime-local" name="reminder" id="" className="form-control-lg form-control" value={formlead.reminder} onChange={handleChange}/>
+                                                        </div>
+                                                        <div className="form-group">
+                                                        <button type="submit" className="submit-button">Submit</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div style={{ width: '500px', height: '500px' }}>
+                                        <div className='card mt-4' style={{ width: '500px', height: '500px' }}>
                                            <canvas ref={chartRef} id="myChart" width="500" height="500"></canvas>
                                         </div>
                                     </div>

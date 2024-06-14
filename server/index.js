@@ -412,7 +412,7 @@ app.get('/notification', (req, res) => {
 // Notification List
 app.get('/notification-list/:sperson_unique_id',(req,res)=>{
     const sperson_unique_id = req.params.sperson_unique_id;
-    const sqlGetdata = `SELECT * FROM last_message WHERE sales_person_id = ?`;
+    const sqlGetdata = `SELECT * FROM last_message WHERE sales_person_id = ? ORDER BY id DESC`;
     // const getfromnewlead = `SELECT * FROM new_leads where unique_id=?`;
     con.query(sqlGetdata,[sperson_unique_id],(error,rows)=>{
         if (error) {
@@ -590,7 +590,7 @@ app.get('/delivered-data/:unique_id',(req,res)=>{
     })
 })
   
-app.listen(3002,'192.168.1.13',()=>{
+app.listen(3002,'192.168.1.10',()=>{
      console.log('Server is successfully runnig on 3002 port')
 });
 

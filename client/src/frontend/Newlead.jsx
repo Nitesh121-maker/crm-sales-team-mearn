@@ -1,6 +1,9 @@
 import React, { useEffect,useState } from 'react'
-import '../css/newlead.css';
 import { FaBackward, FaForward } from 'react-icons/fa';
+import "bootstrap/dist/css/bootstrap.min.css";
+import '../css/newlead.css';
+
+
 const Newlead = ({handleLeads}) => {
     const[newcreatedLeads,setNewcreatedLeads]=useState("");
 
@@ -10,7 +13,7 @@ const Newlead = ({handleLeads}) => {
     useEffect(() => {
       const newleads = async () => {
           try {
-              const response = await fetch(`http://192.168.1.13:3002/newclient/${sperson_unique_id}?pageNumber=${pageNumber}`);
+              const response = await fetch(`http://192.168.1.10:3002/newclient/${sperson_unique_id}?pageNumber=${pageNumber}`);
               if (!response.ok) {
                   throw new Error(`HTTP error! Status: ${response.status}`);
               }
@@ -38,35 +41,55 @@ const Newlead = ({handleLeads}) => {
       setPageNumber((prevPageNumber) => prevPageNumber + 1);
     };
   return (
-    <div className="list-container">
-        <h3>New Leads</h3>
-        <div className="list-header">
-            <div>Full Name</div>
-            <div>Email</div>
-            <div>Phone Number</div>
-            <div>Requirements</div>
-            {/* <div>Company</div> */}
-        </div>
-        {
-            Array.isArray(newcreatedLeads) && newcreatedLeads.length> 0 ?(
-                newcreatedLeads.map((leads,index) => (
-                    <div key={index} className={`list-item ${index % 2 === 0 ? 'even' : 'odd'}`} onClick={() => handleClick(leads)}>
-                        <div>{leads.fullname}</div>
-                        <div>{leads.email}</div>
-                        <div>{leads.number}</div>
-                        <div>{leads.requirements}</div>
+    <div className="row">
+        <div className="mt-r col-lg-12">
+            <div className="card">
+                <div className="card-body">
+                    <h3 className="card_title">
+                        New Leads
+                    </h3>
+                    <div className="single-table">
+                        <div className="table-responsive">
+                            <table className="mb-0 table-hover progress-table text-center table">
+                                <thead className='text-uppercase'>
+                                    <tr>
+                                        <th scope='col'>Full Name</th>
+                                        <th scope='col'>Email</th>
+                                        <th scope='col'>Phone</th>
+                                        <th scope='col'>Requirements</th>
+                                    </tr>
+                                </thead>
+                                <tbody className='text-uppercase'>
+                                {
+                                    Array.isArray(newcreatedLeads) && newcreatedLeads.length> 0 ?(
+                                        newcreatedLeads.map((leads,index) => (
+                                            <tr key={index}  onClick={() => handleClick(leads)}>
+                                                <td>{leads.fullname}</td>
+                                                <td>{leads.email}</td>
+                                                <td>{leads.number}</td>
+                                                <td>{leads.requirements}</td>
+                                            </tr>
+                                            
+                                            ))
+                                    ):(
+                                        <td>No new leads</td>
+                                    )
+                                }
+                                    
+                                    
+                                </tbody>
+                            </table>
+                        <div className="mt-2">
+                        <button className='btn-rounded btn-fixed-w mr-2 btn btn-outline-success' onClick={goToPreviousPage} disabled={pageNumber === 1}><FaBackward/></button>
+                              <span className='text-white'>Page {pageNumber}</span>
+                            <button className='btn-rounded btn-fixed-w mr-2 btn btn-outline-success' onClick={goToNextPage}><FaForward/></button>
+                        </div>
+                        </div>
                     </div>
-                    
-                    ))
-            ):(
-                <div className="list-item">
-                    <div>No new leads</div>
                 </div>
-            )
-        }
-        <button onClick={goToPreviousPage} disabled={pageNumber === 1}><FaBackward/></button>
-           <span>Page {pageNumber}</span>
-        <button onClick={goToNextPage}><FaForward/></button>
+            </div>
+        </div>
+     
     </div>
   )
 }
