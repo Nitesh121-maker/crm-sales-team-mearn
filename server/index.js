@@ -197,6 +197,22 @@ app.get('/newclient/:sperson_unique_id', (req, res) => {
         }
     });
 });
+// Edit lead email
+app.post('/edit-client/:uniqueid',(req,res)=>{
+    const{uniqueid}=req.params;
+    const{email}=req.body;
+    console.log('Email',email)
+    const sqlUpdate = `UPDATE new_lead SET email = ? WHERE unique_id = ?`;
+    con.query(sqlUpdate,[email,uniqueid],(err,result)=>{
+        if(err){
+            console.error(err);
+            res.status(500).send({ message: "Internal server error" });
+            } else {
+                res.send({ message: 'Email updated successfully.' });
+                console.log('Result',result)
+            }
+    })
+})
 // Get In-progress data
 app.get('/in-progress/:sperson_unique_id',(req,res)=>{
     const {sperson_unique_id} = req.params;
@@ -590,7 +606,7 @@ app.get('/delivered-data/:unique_id',(req,res)=>{
     })
 })
   
-app.listen(3002,'192.168.1.10',()=>{
+app.listen(3002,'192.168.1.13',()=>{
      console.log('Server is successfully runnig on 3002 port')
 });
 

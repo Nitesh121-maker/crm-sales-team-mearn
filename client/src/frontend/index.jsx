@@ -193,7 +193,7 @@ useEffect(() => {
 // Logout
 const handleLogout = async () => {
     try {
-        const response = await fetch('http://192.168.1.10:3002/logout', {
+        const response = await fetch('http://192.168.1.13:3002/logout', {
             method: 'POST', // Change to POST
             headers: {
                 'Content-Type': 'application/json'
@@ -230,7 +230,7 @@ const handleChange =(e)=>{
 const createLead = async(e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://192.168.1.10:3002/createlead',{
+        const response = await fetch('http://192.168.1.13:3002/createlead',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -252,7 +252,7 @@ const[closedLeadslist, setClosedLeadlist] = useState(['']);
 useEffect(() => {
   const newclosedlead = async(e) => {
       try {
-          const response = await fetch(`http://192.168.1.10:3002/closedLeadlist/${sperson_unique_id}`);
+          const response = await fetch(`http://192.168.1.13:3002/closedLeadlist/${sperson_unique_id}`);
           if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`)
           }
@@ -272,7 +272,7 @@ const[errormessage,seterrormessage] = useState("");
 useEffect(() => {
  const fetchSuccessfulLeads = async () => {
     try {
-       const response = await fetch(`http://192.168.1.10:3002/successfullead/${sperson_unique_id}`);
+       const response = await fetch(`http://192.168.1.13:3002/successfullead/${sperson_unique_id}`);
        if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
        }
@@ -292,7 +292,7 @@ const [notification,setNotification] = useState(['']);
 useEffect(() => {
     const getNotification = async() => {
         try {
-            const response = await fetch(`http://192.168.1.10:3002/notification-list/${sperson_unique_id}`);
+            const response = await fetch(`http://192.168.1.13:3002/notification-list/${sperson_unique_id}`);
             if (!response.ok) {
                 throw new Error(`Error! status: ${response.status}`);  
             }
@@ -310,7 +310,7 @@ useEffect(() => {
 useEffect(() => {
     const getInprogress = async(e)=>{
        try {
-         const response = await fetch(`http://192.168.1.10:3002/in-progress/${sperson_unique_id}`);
+         const response = await fetch(`http://192.168.1.13:3002/in-progress/${sperson_unique_id}`);
          if(!response.ok){
             throw new Error(`Error! status:${response.status}`);
          }
@@ -328,7 +328,7 @@ useEffect((e) => {
     const getsales = async(e) =>{
 
         try {
-            const response = await fetch(`http://192.168.1.10:3002/sales-data/${sperson_unique_id}`);
+            const response = await fetch(`http://192.168.1.13:3002/sales-data/${sperson_unique_id}`);
             if(!response.ok){
                 throw new Error(`Error! status: ${response.status}`);  
             }
@@ -610,18 +610,19 @@ let  inprogrssclient = inprogrss.length||0;
                                 <Newlead handleLeads={handleLeads}/>
                             </div>
                         }
-                        {/* Selected Leads */}
-                        {leads&&
-                            <div className="lead">
-                                <Leads leadData={selectedLead} handleClosedLead={handleClosedLeads} handleInvoice={handleInvoice}/>
-                            </div>
-                        }
                         {/* Close Leads */}
                         {closedleadform&&
                             <div className="closedlead">
                                 <ClosedLeads ClosedLeads={closedleaddata}/>
                             </div>
                         }
+                        {/* Selected Leads */}
+                        {leads&&
+                            <div className="lead">
+                                <Leads leadData={selectedLead} handleClosedLead={handleClosedLeads} handleInvoice={handleInvoice}/>
+                            </div>
+                        }
+
                         {/* Closed Lead List */}
                         {closedLeadlist&&
                             <div className="closed-lead-list">

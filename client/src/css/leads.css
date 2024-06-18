@@ -91,12 +91,12 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f0f8ff; /* Light blue background */
+    /* background-color: #f0f8ff;  */
   }
   
   /* Old Message */
   .old-message {
-    background-color: #f0f8ff; /* Light blue background */
+    background-color: #f0f8ff; 
     padding: 10px;
     width: 90%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
@@ -170,29 +170,29 @@
   .message-list{
     list-style: none;
   }
-  .styled-form {
+  /* .styled-form {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+  } */
   
-  .styled-form label {
+  /* .styled-form label {
     display: flex;
     align-items: center;
     padding: 10px;
     background-color: #cdafaf;
     border-radius: 5px;
     cursor: pointer;
-  }
+  } */
   
-  .styled-form label svg {
+  /* .styled-form label svg {
     margin-right: 10px;
-  }
+  } */
   
-  .styled-form input[type='file'] {
+  /* .styled-form input[type='file'] {
     display: none;
-  }
-  
+  } */
+/*   
   .styled-form button {
     margin-top: 10px;
     padding: 10px 20px;
@@ -205,5 +205,5 @@
   
   .styled-form button:hover {
     background-color: #0056b3;
-  }
+  } */
   

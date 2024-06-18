@@ -13,7 +13,7 @@ const ClosedLeadChat = ({closedLeadchat,handleClosedleadlist}) => {
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch('http://192.168.1.10:3002/newmessages', {
+          const response = await fetch('http://192.168.1.13:3002/newmessages', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ const ClosedLeadChat = ({closedLeadchat,handleClosedleadlist}) => {
   const fetchMessages = async () => {
     try {
       const uniqueid = closedLeadchat.unique_id;
-      const response = await fetch(`http://192.168.1.10:3002/closedLeadMessage/${uniqueid}`);
+      const response = await fetch(`http://192.168.1.13:3002/closedLeadMessage/${uniqueid}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -60,7 +60,7 @@ const ClosedLeadChat = ({closedLeadchat,handleClosedleadlist}) => {
 const handlelastmessage = async (e)=>{
   
     try {
-      const response = await fetch('http://192.168.1.10:3002/notification');
+      const response = await fetch('http://192.168.1.13:3002/notification');
       if (!response.ok) {
         throw new Error(`Error! status: ${response.status}`);
       }
@@ -74,7 +74,7 @@ const handleRestore = async (closedLeadchat,e)  => {
     let clientid = closedLeadchat.unique_id;
     console.log('Client Id',clientid);
     try {
-        const response =  await fetch(`http://192.168.1.10:3002/restore-closed-leads/${clientid}`);
+        const response =  await fetch(`http://192.168.1.13:3002/restore-closed-leads/${clientid}`);
         if(!response.ok){
             throw new Error(`HTTP error! Status: ${response.status}`);
         }

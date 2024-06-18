@@ -13,7 +13,7 @@ const DataDeliveryStatus = ({successLead,successfulleadsdata,handleSuccessfullea
     useEffect(() => {
         const getDelivereddata = async(e) =>{
             try {
-                const responce = await fetch(`http://192.168.1.10:3002/delivered-data/${unique_id}`);
+                const responce = await fetch(`http://192.168.1.13:3002/delivered-data/${unique_id}`);
                 if (!responce.ok) {
                     throw new Error(`HTTP error! Status: ${responce.status} - ${responce.statusText}`);
                   }     
@@ -31,7 +31,7 @@ const DataDeliveryStatus = ({successLead,successfulleadsdata,handleSuccessfullea
         <data className="col-lg-12 col-md-12">
             <div className="card">
                 <div className="card-header">
-                    <h4 className="card_title">
+                    <h4 className="text-white card_title">
                         Data Deleivery Status
                     </h4>
                 </div>

@@ -1,13 +1,16 @@
 import React, { useState,useEffect } from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
 import '../css/leads.css';
 import { FaFile } from 'react-icons/fa';
+import { IoSendSharp } from "react-icons/io5";
 import {FaArrowLeft} from  'react-icons/fa'
-import "bootstrap/dist/css/bootstrap.min.css";
+
 function Leads({ leadData,handleClosedLead,handleInvoice }) {
   const uniqueid = leadData.unique_id;
    console.log('Lead data',leadData);
   const [successleadmessage,setsuccessleadMessage]=useState([]);
   const [closingsuccess, setclosingsuccess]=useState(false);
+  const [sucessemessage,setsucessemessage]=useState([]);
 
 
   const [formData, setFormData] = useState({
@@ -20,7 +23,7 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://192.168.1.10:3002/newmessages', {
+      const response = await fetch('http://192.168.1.13:3002/newmessages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +53,7 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
   const fetchMessages = async () => {
     try {
    
-      const response = await fetch(`http://192.168.1.10:3002/clientmessage/${uniqueid}`);
+      const response = await fetch(`http://192.168.1.13:3002/clientmessage/${uniqueid}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -77,7 +80,7 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
   const handleleadsuccess = async (e)=>{
     e.preventDefault();
     try {
-      const response = await fetch('http://192.168.1.10:3002/successlead',{
+      const response = await fetch('http://192.168.1.13:3002/successlead',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +109,7 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
   const handlelastmessage = async (e)=>{
   
     try {
-      const response = await fetch('http://192.168.1.10:3002/notification');
+      const response = await fetch('http://192.168.1.13:3002/notification');
       if (!response.ok) {
         throw new Error(`Error! status: ${response.status}`);
       }
@@ -132,7 +135,7 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
         formData.append('subject', 'Invoice');
         formData.append('message', 'Please find the attached invoice');
 
-        const response = await fetch(`http://192.168.1.10:3002/mail/${uniqueid}`, {
+        const response = await fetch(`http://192.168.1.13:3002/mail/${uniqueid}`, {
             method: 'POST',
             body: formData
         });
@@ -151,7 +154,32 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
     }
 };
 
- 
+  //  Edit Client4
+  const[editform,seteditform] = useState({
+    email:''
+  })
+  const handleEditchange = (e) =>{
+    seteditform({...editform,[e.target.name]:e.target.value})
+  }
+  const handleEditClient = async (e) => {
+    e.preventDefault();
+    try {
+      const responce = await fetch(`http://192.168.1.13:3002/edit-client/${uniqueid}`,{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email:editform.email,
+        })
+      })
+      const data = await responce.json();
+      if(responce.ok){
+        setsucessemessage(data);
+        console.log('Client updated successfully');
+      }
+    } catch (error) {
+      console.log('error',error)
+    }
+  }
   return (
     <><a href="/sales-dashboard"><button type='button'><FaArrowLeft /></button></a>
     <div className="row conversation-page">
@@ -165,23 +193,26 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
             <button type="submit" className="action-button successful"  >Successful</button>
           </form> */}
           <div className="generate-invoice">
-            <button type="button" onClick={() => handleInvoice(leadData)}>Generate Invoice</button>
+            <button className='btn-fixed-w mb-3 mr-2 btn btn-outline-success' type="button" onClick={() => handleInvoice(leadData)}>Generate Invoice</button>
           </div>
           <div className="invoice">
-            <form className="styled-form" onSubmit={invoiceUpload}>
-              <label htmlFor="file-input">
+            <form className="d-flex styled-form" onSubmit={invoiceUpload}>
+              {/* <label htmlFor="file-input">
                 <FaFile />
                 Choose File
-              </label>
-              <input type="file" id="file-input" name="invoice" onChange={handleFileChange} />
+              </label> */}
+              <p className='text-white'></p>
+              <input className='form-control' type="file" name="invoice"  />
 
-              <button type="submit">Send Invoice</button>
+              <button type="submit" className="btn-rounded btn-fixed-w mr-2 btn btn-outline-success">
+                  <IoSendSharp />
+              </button>
             </form>
           </div>
         </div>
       </div>
 
-      <div className="client-conversation-info d-flex col-md-8 gap-2">
+      <div className="client-conversation-info d-flex col-md-8 gap-2 mt-3">
         <div className="client-info col-md-5">
           <div className="card">
             <div className="card-body text-white">
@@ -191,13 +222,20 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
               <p className='card-text'>Phone:{leadData.number}</p>
               <p className='card-text'>Commpany:{leadData.company}</p>
             </div>
+            <div className="card-body">
+               <form action="" onSubmit={handleEditClient}>
+                <label className='text-white'>Edit Email:</label>
+                <input type="email" name='email' className='form-control' placeholder='New email' value={editform.email} onChange={handleEditchange}/>
+                <button type='submit' className='mt-2 btn-rounded btn-fixed-w mb-3 mr-2 btn btn-outline-success'>Edit</button>
+               </form>
+            </div>
           </div>
         </div>
         <div className="conversation col-md-6">
-          <div className="old-message">
+          <div className="card old-message">
             {/* Display the previous message or conversation */}
             <div className="chat-header">
-              <p>Client Name: {leadData.fullname}</p>
+              <p className='text-white'>Client Name: {leadData.fullname}</p>
             </div>
             <div className="chat">
 
@@ -223,15 +261,16 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
             </div>
 
           </div>
-          <div className="new-conversation">
+          <div className="card new-conversation">
             {/* Form for new conversation */}
             <form onSubmit={(e) => {
               e.preventDefault(); // Prevent default form submission behavior
               handleSubmit(e); // Call the handleSubmit function
               handlelastmessage(); // Call the handlelastmessage function
             } }>
-              <div className="form-groups">
+              <div className="form-control">
                 <textarea
+                  className='form-control'
                   id="requirements"
                   name="requirements"
                   value={formData.requirements}
@@ -239,7 +278,7 @@ function Leads({ leadData,handleClosedLead,handleInvoice }) {
                   placeholder="Enter requirements..."
                   required
                 ></textarea>
-                <input type="datetime-local" name="reminder" id="" value={formData.reminder} onChange={handleChange} />
+                <input className='form-control mt-1' type="datetime-local" name="reminder" id="" value={formData.reminder} onChange={handleChange} />
               </div>
               <button type="submit" onClick={() => handlelastmessage()}>Send</button>
             </form>

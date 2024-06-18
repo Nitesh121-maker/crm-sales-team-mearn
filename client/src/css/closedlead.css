@@ -2,8 +2,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -30rem;
-    /* height: 100vh; */
+    position: absolute;
+    z-index: 1;
+    margin-top: 13rem;
 }
 
 .closedleadform {

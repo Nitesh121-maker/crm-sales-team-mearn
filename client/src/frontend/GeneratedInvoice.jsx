@@ -6,7 +6,7 @@ const GeneratedInvoice = () => {
     useEffect(() => {
         const getinvoicedata = async()=>{
             try {
-                const response = await fetch(`http://192.168.1.10:3002/invoice-details/${sales_person_id}`);
+                const response = await fetch(`http://192.168.1.13:3002/invoice-details/${sales_person_id}`);
                 const data = await response.json();
                 setinvoiceData(data);
             } catch (error) {
@@ -42,7 +42,7 @@ const GeneratedInvoice = () => {
                                                 <td>{data.invoice_number}</td>
                                                 <td>{data.invoice_date}</td>
                                                 <td>
-                                                    <a href={`http://192.168.1.10:3002/downloads/${data.unique_id}.pdf`} 
+                                                    <a href={`http://192.168.1.13:3002/downloads/${data.unique_id}.pdf`} 
                                                     className='btn-rounded btn-fixed-w btn btn-outline-primary' 
                                                     target="_blank" 
                                                     rel="noopener noreferrer">

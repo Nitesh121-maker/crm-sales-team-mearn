@@ -13,7 +13,7 @@ const Newlead = ({handleLeads}) => {
     useEffect(() => {
       const newleads = async () => {
           try {
-              const response = await fetch(`http://192.168.1.10:3002/newclient/${sperson_unique_id}?pageNumber=${pageNumber}`);
+              const response = await fetch(`http://192.168.1.13:3002/newclient/${sperson_unique_id}?pageNumber=${pageNumber}`);
               if (!response.ok) {
                   throw new Error(`HTTP error! Status: ${response.status}`);
               }

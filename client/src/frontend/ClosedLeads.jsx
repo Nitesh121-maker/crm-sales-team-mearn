@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import '../css/closedlead.css'
+
 function ClosedLeads({ClosedLeads}) {
   const sales_person_id = sessionStorage.getItem('unique_id');
   console.log('sales_person_id:', sales_person_id);
@@ -17,7 +18,7 @@ function ClosedLeads({ClosedLeads}) {
     const handleSubmit  = async (e) =>{
         e.preventDefault();
         try {
-            const response = await fetch('http://192.168.1.10:3002/closedlead',{
+            const response = await fetch('http://192.168.1.13:3002/closedlead',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
@@ -48,15 +49,15 @@ function ClosedLeads({ClosedLeads}) {
     }
 
   return (
-    <div className="closedleadmain">
-        <div className="closedleadform">
+    <div className="card closedleadmain">
+        <div className="card-body">
         {message && <p className='message'>{message}</p>}
             <form  method="post" onSubmit={handleSubmit}>
-                <div className="closedleadform-input">
-                    <textarea name="finalrequirement" id="" cols="30" rows="5" value={closingstatement.finalrequirement} onChange={handleClosingChange} placeholder='final requirement....' required></textarea>
+                <div className="form-control closedleadform-input">
+                    <textarea className='form-control' name="finalrequirement" id="" cols="30" rows="5" value={closingstatement.finalrequirement} onChange={handleClosingChange} placeholder='final requirement....' required></textarea>
                 </div>
-                <div className="closedleadform-input">
-                    <textarea name="closingreason" id="" cols="30" rows="5" value={closingstatement.closingreason} onChange={handleClosingChange}placeholder='closing reason....' required></textarea>
+                <div className="form-control closedleadform-input">
+                    <textarea className='form-control' name="closingreason" id="" cols="30" rows="5" value={closingstatement.closingreason} onChange={handleClosingChange}placeholder='closing reason....' required></textarea>
                 </div>
                 <div className="closedlead-submit-button">
                     <button type="submit">Close Lead</button>
